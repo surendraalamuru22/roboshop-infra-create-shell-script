@@ -12,7 +12,6 @@ create_ec2() {
       --image-id ${AMI_ID} \
       --instance-type t3.micro \
       --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${COMPONENT}}]"  \
-      --instance-market-options "MarketType=spot,SpotOptions={SpotInstanceType=persistent,InstanceInterruptionBehavior=stop}"\
       --security-group-ids ${SGID} \
       | jq '.Instances[].PrivateIpAddress' | sed -e 's/"//g')
 
@@ -33,7 +32,6 @@ if [ -z "${SGID}" ]; then
   echo "Given Security Group does not exit"
   exit 1
 fi
-
 
 for component in catalogue cart user shipping payment frontend mongodb mysql rabbitmq redis dispatch; do
   COMPONENT="${component}"
